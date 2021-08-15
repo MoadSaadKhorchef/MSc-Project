@@ -52,7 +52,6 @@ public class PrimaryController {
         return fileChooser.showOpenDialog(new Stage());
     }
     
-    
     @FXML
     void runButtonFunction(ActionEvent event) {
         
@@ -72,11 +71,11 @@ public class PrimaryController {
 
                         String imgDir = pictureNameTextField.getText();
 
-                        String[] command = {"cmd.exe", "/c", "python.exe" ,"C:\\Users\\keith\\Documents\\NetBeansProjects\\gui\\src\\gui\\Prediction.py",""+imgDir};
+                        String[] command = {"cmd.exe", "/c", "python.exe" ,"C:\\Users\\Moad\\Documents\\MSc Project\\Code\\Interface For Prediction\\RiverSegmentation\\src\\main\\java\\com\\mycompany\\riversegmentation\\Prediction.py",""+imgDir};
 
                         processBuilder.command(command);
 
-                        processBuilder.directory(new File("C:\\Users\\keith\\Documents\\NetBeansProjects\\gui\\src\\gui\\"));
+                        processBuilder.directory(new File("C:\\Users\\Moad\\Documents\\MSc Project\\Code\\Interface For Prediction\\RiverSegmentation\\src\\main\\java\\com\\mycompany\\riversegmentation\\"));
 
                         Process process = processBuilder.start();
                         List<String> alist=new ArrayList<String>();  
