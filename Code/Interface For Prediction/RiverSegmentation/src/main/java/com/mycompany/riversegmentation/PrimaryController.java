@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -27,6 +29,9 @@ public class PrimaryController {
 
     @FXML
     private Button runButton;
+    
+    @FXML
+    private ImageView selectedImage;
 
     @FXML
     void browseButtonFunction(ActionEvent event) {
@@ -38,16 +43,19 @@ public class PrimaryController {
             pictureNameTextField.setText(file.getAbsolutePath());
             
         }
+        Image image = new Image(file.toURI().toString());
+         // simple displays ImageView the image as is
+        selectedImage.setImage(image);
              
     }
         	
-    public static File openFile(String titel)
+    public static File openFile(String title)
     {
         //FileChooser fileChooser;
         //fileChooser = new FileChooser();
         FileChooser fileChooser = new javafx.stage.FileChooser();
         fileChooser.getExtensionFilters().addAll(new javafx.stage.FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        fileChooser.setTitle(titel);
+        fileChooser.setTitle(title);
         return fileChooser.showOpenDialog(new Stage());
     }
     

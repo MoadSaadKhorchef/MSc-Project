@@ -3,6 +3,8 @@ import cv2
 import matplotlib.pyplot as plt
 import torch
 from torchvision import transforms
+import sys
+
 
 from unet import UNet
 
@@ -47,35 +49,35 @@ def labels2mask(labels):
 	
 	
 
-def makePrediction (input_image):
-
-    model = UNet()
-    model.load_state_dict(torch.load("state_dict.pth", map_location="cpu"))
-
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = model.to(device)
-
-    #image = cv2.imread(input_image) 
-
-    p_image = process(input_image)
-    p_image = p_image.reshape(1,3,416,416)
-    #print(p_image.shape)    
     
-    p_image = p_image.to(device)
 
-    pred = model(p_image)
-    pred = torch.sigmoid(pred)
-    pred = pred.data.cpu().numpy()
-    p_image = p_image.data.cpu()
+model = UNet()
+model.load_state_dict(torch.load("state_dict.pth", map_location="cpu"))
 
-    # dataloader return normalized input image, so we have to denormalize before viewing
-    input_images = reverse_transform(p_image)
-    # target and predict mask are single channel, so squeeze
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = model.to(device)
 
-    pred = labels2mask(pred)
+#image = cv2.imread(input_image) 
+
+p_image = process(sys.argv[1])
+p_image = p_image.reshape(1,3,416,416)
+#print(p_image.shape)    
+
+p_image = p_image.to(device)
+
+pred = model(p_image)
+pred = torch.sigmoid(pred)
+pred = pred.data.cpu().numpy()
+p_image = p_image.data.cpu()
+
+# dataloader return normalized input image, so we have to denormalize before viewing
+input_images = reverse_transform(p_image)
+# target and predict mask are single channel, so squeeze
+
+pred = labels2mask(pred)
 
 
-    cv2.imshow("segmented image",pred) 
-  
+cv2.imshow("segmented image",pred) 
+
 
     
