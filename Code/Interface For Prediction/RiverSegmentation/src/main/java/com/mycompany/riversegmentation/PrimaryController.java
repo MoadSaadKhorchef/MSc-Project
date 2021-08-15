@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,6 +33,11 @@ public class PrimaryController {
     
     @FXML
     private ImageView selectedImage;
+    
+    @FXML
+    private TextArea resultTextArea;
+    
+    String str;
 
     @FXML
     void browseButtonFunction(ActionEvent event) {
@@ -39,11 +45,16 @@ public class PrimaryController {
         File file = openFile("Load Image");
         if (file != null)
         {
-
-            pictureNameTextField.setText(file.getAbsolutePath());
+            str = file.getAbsolutePath();
+            str = str.replace("\\", "//");
+            System.out.println(str);
+            pictureNameTextField.setText(str);
             
         }
-        Image image = new Image(file.toURI().toString());
+        
+        str = file.toURI().toString();
+        System.out.println(str);
+        Image image = new Image(str);
          // simple displays ImageView the image as is
         selectedImage.setImage(image);
              
@@ -54,7 +65,7 @@ public class PrimaryController {
         //FileChooser fileChooser;
         //fileChooser = new FileChooser();
         FileChooser fileChooser = new javafx.stage.FileChooser();
-        fileChooser.getExtensionFilters().addAll(new javafx.stage.FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+        fileChooser.getExtensionFilters().addAll(new javafx.stage.FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
         fileChooser.setTitle(title);
         return fileChooser.showOpenDialog(new Stage());
     }
@@ -64,7 +75,6 @@ public class PrimaryController {
         
         try
         {
-            //imResult =
             //resultImage.setImage(mat2Image(imgSource));
             Thread outStreamReader = new Thread(new Runnable() {
                 public void run() {
@@ -77,14 +87,16 @@ public class PrimaryController {
                         processBuilder = processBuilder.redirectErrorStream(true);
 
                         String imgDir = pictureNameTextField.getText();
+                        System.out.println(imgDir);
 
-                        String[] command = {"cmd.exe", "/c", "python.exe" ,"C:\\Users\\Moad\\Documents\\MSc Project\\Code\\Interface For Prediction\\RiverSegmentation\\src\\main\\java\\com\\mycompany\\riversegmentation\\Prediction.py",""+imgDir};
+
+                        String[] command = {"cmd.exe", "/c", "python.exe" ,"C:\\Users\\Moad\\Documents\\MSc Project\\Code\\Interface For Prediction\\RiverSegmentation\\src\\main\\java\\com\\mycompany\\riversegmentation\\Prediction.py",imgDir};
 
                         processBuilder.command(command);
 
                         processBuilder.directory(new File("C:\\Users\\Moad\\Documents\\MSc Project\\Code\\Interface For Prediction\\RiverSegmentation\\src\\main\\java\\com\\mycompany\\riversegmentation\\"));
 
-                        Process process = processBuilder.start();
+                         Process process = processBuilder.start();
                         List<String> alist=new ArrayList<String>();  
                         List<String> flist=new ArrayList<String>();  
 
@@ -104,8 +116,8 @@ public class PrimaryController {
                                 final String s = alist.get(0);
                                 //int size = alist.size();
                                 //System.out.println(size); 
-                                //Platform.setImplicitExit(false);
-                                //resultfeedback(s);
+                                Platform.setImplicitExit(false);
+                                resultfeedback(s);
                                 //Platform.runLater(  () -> detectionResultTextArea.setText(s) )  ;
                                 //Thread.sleep(1000);
                                 line = null;
@@ -139,6 +151,13 @@ public class PrimaryController {
             // resultImage.setImage(mat2Image(imgSource));
         }
 
+    }
+    
+    
+    public void resultfeedback (final String s){
+       
+        Platform.runLater(  () -> resultTextArea.setText(s) );
+        
     }
 
     @FXML

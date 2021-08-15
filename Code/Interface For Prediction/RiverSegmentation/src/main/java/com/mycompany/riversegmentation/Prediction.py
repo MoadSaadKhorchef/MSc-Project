@@ -1,12 +1,12 @@
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
 import torch
 from torchvision import transforms
 import sys
+import os
 
 
-from unet import UNet
+from vgg_unet import VggUnet
 
 
 def process(images_fps):
@@ -27,10 +27,10 @@ def process(images_fps):
 
 def reverse_transform(inp):
    
-   inv_normalize = transforms.Normalize(
-   mean=[-0.485/0.229, -0.456/0.224, -0.406/0.225],
-   std=[1/0.229, 1/0.224, 1/0.225]
-   ) 
+    inv_normalize = transforms.Normalize(
+    mean=[-0.485/0.229, -0.456/0.224, -0.406/0.225],
+    std=[1/0.229, 1/0.224, 1/0.225]
+    ) 
 	
 	#print(inp.shape)
     inp = inv_normalize(inp)
@@ -47,19 +47,18 @@ def labels2mask(labels):
     return labels[:,1,:,:]
 	
 	
-	
-
-    
-
-model = UNet()
+model = VggUnet()
 model.load_state_dict(torch.load("state_dict.pth", map_location="cpu"))
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = model.to(device)
 
-#image = cv2.imread(input_image) 
+image_dir = os.path.normpath( str(sys.argv[1]))
+#print(image_dir)
+#sys.stdout.flush()
 
-p_image = process(sys.argv[1])
+
+p_image = process(image_dir)
 p_image = p_image.reshape(1,3,416,416)
 #print(p_image.shape)    
 
@@ -76,8 +75,18 @@ input_images = reverse_transform(p_image)
 
 pred = labels2mask(pred)
 
+#sys.stdout.flush()
 
-cv2.imshow("segmented image",pred) 
+pred = np.squeeze(pred)
+backtorgb = cv2.cvtColor(pred, cv2.COLOR_RGB2BGR)
 
+#cv2.imshow("Segmented River",backtorgb)
+#print(pred)
+im_pil = Image.fromarray(pred)
+backtorgb.show()
 
+cv2.waitKey(0)
     
+    
+    
+#python Prediction.py "C://Users//Moad//Documents//MSc Project//Code//test.jpeg"
