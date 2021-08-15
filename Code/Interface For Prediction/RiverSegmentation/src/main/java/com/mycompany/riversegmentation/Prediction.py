@@ -77,7 +77,7 @@ def makePrediction (input_image):
     pred = labels2mask(pred)
 
 
-    plt.imshow(pred) 
+    cv2.imshow("segmented image",pred) 
   
 
     
