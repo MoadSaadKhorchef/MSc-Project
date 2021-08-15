@@ -4,9 +4,7 @@ import matplotlib.pyplot as plt
 import torch
 from torchvision import transforms
 
-from models.unet import UNet
-from models.simple import Simple
-from models.vgg_unet import VggUnet
+from unet import UNet
 
 
 def process(images_fps):
@@ -51,7 +49,7 @@ def labels2mask(labels):
 
 def makePrediction (input_image):
 
-    model = VggUnet()
+    model = UNet()
     model.load_state_dict(torch.load("state_dict.pth", map_location="cpu"))
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
