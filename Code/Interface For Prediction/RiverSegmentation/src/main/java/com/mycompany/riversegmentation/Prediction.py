@@ -4,7 +4,7 @@ import torch
 from torchvision import transforms
 import sys
 import os
-
+from PIL import Image
 
 from vgg_unet import VggUnet
 
@@ -54,7 +54,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = model.to(device)
 
 image_dir = os.path.normpath( str(sys.argv[1]))
-#print(image_dir)
+#print("hello "+image_dir)
 #sys.stdout.flush()
 
 
@@ -74,18 +74,22 @@ input_images = reverse_transform(p_image)
 # target and predict mask are single channel, so squeeze
 
 pred = labels2mask(pred)
-
-#sys.stdout.flush()
-
 pred = np.squeeze(pred)
-backtorgb = cv2.cvtColor(pred, cv2.COLOR_RGB2BGR)
 
-#cv2.imshow("Segmented River",backtorgb)
-#print(pred)
-im_pil = Image.fromarray(pred)
-backtorgb.show()
+backtorgb = cv2.cvtColor(pred, cv2.COLOR_GRAY2RGB)
+backtorgb = cv2.normalize(pred, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
+im_color = cv2.applyColorMap(backtorgb, cv2.COLORMAP_HOT)
 
-cv2.waitKey(0)
+#print(im_color)
+#print(backtorgb.shape)
+#print(pred1)
+#print(backtorgb)
+#plt.imshow()
+
+
+im_pil = Image.fromarray(im_color)
+im_pil.show()
+
     
     
     
