@@ -59,6 +59,9 @@ public class PrimaryController {
         Image image = new Image(str);
          // simple displays ImageView the image as is
         selectedImage.setImage(image);
+        //selectedImage.setFitHeight(450);
+        //selectedImage.setFitWidth(250);
+        selectedImage.setPreserveRatio(true);
         //System.out.println(str);
         
 
@@ -117,97 +120,6 @@ public class PrimaryController {
     
     
     
-    
-    
-    /*
-    @FXML
-    void runButtonFunction(ActionEvent event) {
-    
-    try
-    {
-    //resultImage.setImage(mat2Image(imgSource));
-    Thread outStreamReader = new Thread(new Runnable() {
-    public void run() {
-    
-    try {
-    
-    //ExecutorService executor = Executors.newSingleThreadExecutor();
-    ProcessBuilder processBuilder = new ProcessBuilder();
-    
-    processBuilder = processBuilder.redirectErrorStream(true);
-    
-    String imgDir = pictureNameTextField.getText();
-    System.out.println(imgDir);
-    
-    String[] command = {"cmd.exe", "/c", "python.exe" ,"C:\\Users\\Moad\\Documents\\MSc Project\\Code\\Interface For Prediction\\RiverSegmentation\\src\\main\\java\\com\\mycompany\\riversegmentation\\Prediction.py",imgDir};
-    
-    processBuilder.directory(new File("C:\\Users\\Moad\\Documents\\MSc Project\\Code\\Interface For Prediction\\RiverSegmentation\\src\\main\\java\\com\\mycompany\\riversegmentation\\"));
-    processBuilder.command(command);
-    
-    Process process = processBuilder.start();
-    
-    List<String> alist=new ArrayList<String>();
-    List<String> flist=new ArrayList<String>();
-    
-    String line = null;
-    BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    
-    while ((line = in.readLine()) != null) {
-    in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    
-    alist.add(line);
-    //flist = alist.stream().filter(l -> l.startsWith("Text")).collect(Collectors.toList());
-    //flist = in.lines().filter(l -> l.startsWith("confidence")).collect(Collectors.toList());
-    
-    if(!alist.isEmpty()){
-    //alist.forEach(System.out::println);
-    //flist.forEach(cLine -> detectionResultTextArea.setText(cLine));
-    final String s = alist.get(0);
-    //int size = alist.size();
-    //System.out.println(size);
-    Platform.setImplicitExit(false);
-    resultfeedback(s);
-    //Platform.runLater(  () -> detectionResultTextArea.setText(s) )  ;
-    //Thread.sleep(1000);
-    line = null;
-    }
-    
-    //TimeUnit.SECONDS.sleep(30);
-    }
-    
-    int exitCode = process.waitFor();
-    alist.clear();
-    flist.clear();
-    System.out.println("\nExited with error code : " + exitCode);
-    
-    } catch (Exception e) {
-    e.printStackTrace();
-    }
-    //System.out.println("Exit reading process output");
-    }
-    });
-    outStreamReader.start();
-    
-    // webCamCapture = new WebCamCapture(this.cameraFrame);
-    
-    //  String line;
-    //  int exitCode = process.waitFor();
-    //  System.out.println("\nExited with error code : " + exitCode);
-    }catch (NullPointerException e){
-    
-    }finally{
-    // resultImage.setImage(mat2Image(imResult));
-    // resultImage.setImage(mat2Image(imgSource));
-    }
-    
-    }
-    
-    
-    public void resultfeedback (final String s){
-    
-    Platform.runLater(  () -> resultTextArea.setText(s) );
-    
-    }*/
     @FXML
     private void switchToSecondary() throws IOException {
         App.setRoot("secondary");
